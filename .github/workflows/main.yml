@@ -1,0 +1,21 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main  # Asegúrate de que esto coincide con la rama de donde quieres desplegar
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '3.1.x'  # Asegúrate de usar la versión de dotnet correcta para tu proyecto
+      - run: dotnet build --configuration Release
+      - run: dotnet publish -c Release -o ./published
+      - uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./published/wwwroot
